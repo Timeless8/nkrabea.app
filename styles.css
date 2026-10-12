@@ -45,11 +45,9 @@ a { color: var(--starlight); text-decoration-color: var(--veil); text-underline-
 a:hover { text-decoration-color: var(--mist); }
 a:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; border-radius: 2px; }
 
-/* The sky behind every page: three drifting layers of stars, drawn by sky.js. */
+/* The sky behind every page, drawn on one canvas by sky.js. */
 .sky { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-.sky svg { position: absolute; inset: -40px; width: calc(100% + 80px); height: calc(100% + 80px); }
-.sky .layer { animation: drift var(--drift) ease-in-out infinite alternate; }
-@keyframes drift { to { transform: translate(var(--dx), var(--dy)); } }
+.sky canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 
 .page { position: relative; z-index: 1; }
 
@@ -73,16 +71,33 @@ a:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; border-
   position: relative;
   margin-bottom: 12px;
 }
-.mark::before {
+.mark-glow { position: absolute; inset: -45%; pointer-events: none; transition: opacity 1.6s ease; }
+.mark-glow::before {
   content: '';
   position: absolute;
-  inset: -45%;
+  inset: 0;
   background: radial-gradient(circle, rgba(242, 181, 68, 0.2) 0%, rgba(242, 181, 68, 0.06) 45%, transparent 70%);
   animation: glow var(--breath) ease-in-out infinite alternate;
 }
 .mark svg { position: relative; width: 100%; height: 100%; animation: breathe var(--breath) ease-in-out infinite alternate; }
 @keyframes breathe { from { transform: scale(1); } to { transform: scale(1.04); } }
 @keyframes glow { from { opacity: 0.55; } to { opacity: 1; } }
+
+/*
+ * The homepage intro (sky.js): shooting stars link constellations, the last one lands on the
+ * mark's guiding star and the mark draws itself; then the words arrive. `intro` is set before
+ * first paint; `drawing` once sky.js has the mark; `formed` when it is whole (or after 9 s,
+ * so the words never stay hidden).
+ */
+.intro:not(.drawing):not(.formed) .mark svg { opacity: 0; }
+.intro:not(.formed) .mark svg { animation: none; }
+.intro:not(.formed) .mark-glow { opacity: 0; }
+.intro .hero > :not(.mark) { transition: opacity 1.2s ease, transform 1.2s ease; }
+.intro:not(.formed) .hero > :not(.mark) { opacity: 0; transform: translateY(10px); }
+.intro .hero > .proverb { transition-delay: 0.25s; }
+.intro .hero > .meaning { transition-delay: 0.4s; }
+.intro .hero > .tagline { transition-delay: 0.8s; }
+.intro .hero > .soon { transition-delay: 1.1s; }
 
 .wordmark {
   margin: 0;
@@ -188,5 +203,5 @@ footer p { margin: 0; }
 .doc strong { font-weight: 600; }
 
 @media (prefers-reduced-motion: reduce) {
-  .sky .layer, .mark svg, .mark::before, .soon .dot { animation: none; }
+  .mark svg, .mark-glow::before, .soon .dot { animation: none; }
 }
