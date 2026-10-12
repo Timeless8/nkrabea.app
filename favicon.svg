@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <title>nkrabea favicon</title>
+  <rect id="tile" width="512" height="512" rx="112" fill="#12090B"/>
+  <circle id="ring" cx="256" cy="256" r="131" fill="none" stroke="#F2B544" stroke-width="24"/>
+  <path id="star" fill="#FBF1DC" d="M340.5 119.0 L351.0 161.0 L393.0 171.5 L351.0 182.0 L340.5 224.0 L330.0 182.0 L288.0 171.5 L330.0 161.0 Z"/>
+</svg>
